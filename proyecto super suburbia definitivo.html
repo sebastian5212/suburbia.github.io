@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Suburbia - Tienda en Línea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: linear-gradient(135deg, #fff 0%, #f8e1f4 100%);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #e6007e;
+            color: #fff;
+            padding: 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 0 10px 0;
+        }
+        .logo-container img {
+            height: 60px;
+            filter: drop-shadow(0 2px 8px #fff);
+        }
+        .logo-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 1px 2px 8px #a1005a44;
+        }
+        /* Carrito flotante */
+        .cart-float {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            z-index: 10;
+        }
+        .cart-float-btn {
+            background: linear-gradient(90deg, #e6007e 70%, #ffb6e6 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 54px;
+            height: 54px;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #e6007e44;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.2s;
+            position: relative;
+        }
+        .cart-float-btn:hover {
+            background: #a1005a;
+            transform: scale(1.08);
+        }
+        .cart-float-count {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            background: #fff;
+            color: #e6007e;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e6007e;
+            box-shadow: 0 1px 4px #e6007e33;
+        }
+        /* Banner Mejorado */
+        .banner-ofertas {
+            width: 100%;
+            background: linear-gradient(90deg, #e6007e 0%, #ffb6e6 100%);
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 0;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px #e6007e33;
+        }
+        .banner-icon {
+            display: inline-block;
+            margin-right: 18px;
+            animation: icon-bounce 1.2s infinite;
+            font-size: 2.2rem;
+            vertical-align: middle;
+            filter: drop-shadow(0 2px 8px #fff8);
+            z-index: 2;
+        }
+        @keyframes icon-bounce {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-10px);}
+        }
+        .banner-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: banner-move 12s linear infinite;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #fff 30%, #e6007e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        @keyframes banner-move {
+            0% { transform: translateX(100%);}
+            100% { transform: translateX(-100%);}
+        }
+        .banner-glow {
+            position: absolute;
+            left: 0; top: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 20% 50%, #fff5 0%, #fff0 70%);
+            opacity: 0.7;
+            z-index: 1;
+            animation: glow-move 6s linear infinite alternate;
+        }
+        @keyframes glow-move {
+            0% { background-position: 20% 50%;}
+            100% { background-position: 80% 50%;}
+        }
+        /* Categorías dinámicas y vistosas */
+        .categories {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .category {
+            flex: 1 1 320px;
+            min-width: 300px;
+            margin-bottom: 40px;
+            background: linear-gradient(120deg, #f9f6fa 80%, #ffe3f7 100%);
+            border-radius: 22px;
+            box-shadow: 0 4px 18px #e6007e11;
+            padding: 18px 14px 24px 14px;
+            transition: transform 0.25s, box-shadow 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .category::before {
+            content: "";
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 120px; height: 120px;
+            background: radial-gradient(circle, #e6007e33 60%, transparent 100%);
+            z-index: 0;
+        }
+        .category:hover {
+            transform: translateY(-10px) scale(1.04) rotate(-1deg);
+            box-shadow: 0 12px 32px #e6007e33;
+        }
+        .category h3 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+            text-align: center;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #e6007e 60%, #ffb6e6 100%);
+            border-radius: 12px;
+            padding: 10px 0;
+            margin-top: 0;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px #e6007e22;
+            position: relative;
+            z-index: 1;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            z-index: 1;
+        }
+        .product {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+            padding: 10px 8px;
+            border-radius: 12px;
+            box-shadow: 0 1px 8px #e6007e11;
+            transition: box-shadow 0.2s, transform 0.2s;
+            position: relative;
+        }
+        .product:hover {
+            box-shadow: 0 4px 16px #e6007e33;
+            transform: scale(1.02);
+        }
+        .product img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #e6007e22;
+            background: #fff;
+        }
+        .product-info {
+            flex: 1;
+        }
+        .product-info strong {
+            font-size: 1.05rem;
+            color: #333;
+        }
+        .product-info span {
+            display: block;
+            color: #e6007e;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+        .product button {
+            background: linear-gradient(90deg, #e6007e 70%, #ffb6e6 100%);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px #e6007e22;
+        }
+        .product button:hover {
+            background: #a1005a;
+            transform: scale(1.08);
+        }
+        .cart-section {
+            scroll-margin-top: 120px;
+        }
+        .cart {
+            margin-top: 30px;
+            background: linear-gradient(120deg, #f3f3f3 80%, #ffe3f7 100%);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #e6007e11;
+        }
+        .cart h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+        .cart-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 10px;
+        }
+        .cart-list li {
+            margin-bottom: 12px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 8px 10px;
+            box-shadow: 0 1px 4px #e6007e11;
+        }
+        .cart-list .cart-product-name {
+            flex: 1;
+        }
+        .cart-list input[type="number"] {
+            width: 50px;
+            padding: 3px;
+            border-radius: 4px;
+            border: 1px solid #e6007e44;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .remove-btn {
+            background: #fff0f6;
+            color: #e6007e;
+            border: 1px solid #e6007e44;
+            border-radius: 4px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s;
+        }
+        .remove-btn:hover {
+            background: #e6007e;
+            color: #fff;
+        }
+        .checkout-btn {
+            background: linear-gradient(90deg, #e6007e 70%, #ffb6e6 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-top: 10px;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px #e6007e22;
+        }
+        .checkout-btn:hover {
+            background: #a1005a;
+        }
+        /* Ticket modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 14px;
+            padding: 30px 28px;
+            min-width: 320px;
+            max-width: 90vw;
+            box-shadow: 0 4px 24px #e6007e33;
+            text-align: center;
+            position: relative;
+            animation: modalIn 0.3s;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.8); opacity: 0;}
+            to { transform: scale(1); opacity: 1;}
+        }
+        .modal-content h3 {
+            color: #e6007e;
+            margin-top: 0;
+        }
+        .ticket-list {
+            text-align: left;
+            margin: 18px 0;
+            font-size: 1.05rem;
+        }
+        .ticket-list li {
+            margin-bottom: 6px;
+        }
+        .close-modal {
+            background: #e6007e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 18px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s;
+        }
+        .close-modal:hover {
+            background: #a1005a;
+        }
+        @media (max-width: 1000px) {
+            .categories {
+                flex-direction: column;
+                gap: 0;
+            }
+            .category {
+                margin-bottom: 30px;
+            }
+            .cart-float {
+                top: 18px;
+                right: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="https://plazalasmisiones.mx/wp-content/uploads/2024/04/SUBURBIA.jpg" alt="Logo Suburbia">
+            <span class="logo-title">Suburbia</span>
+        </div>
+        <div class="cart-float">
+            <button class="cart-float-btn" onclick="goToCart()" title="Ver carrito">
+                🛒
+                <span class="cart-float-count" id="cart-float-count">0</span>
+            </button>
+        </div>
+    </header>
+    <div class="banner-ofertas">
+        <span class="banner-icon">🎉</span>
+        <span class="banner-text" id="banner-text"></span>
+        <div class="banner-glow"></div>
+    </div>
+    <div class="container">
+        <h2>Categorías</h2>
+
+        <div class="categories">
+            <!-- Ropa de Hombre -->
+            <div class="category">
+                <h3>Ropa de Hombre</h3>
+                <div class="products">
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1707828/pexels-photo-1707828.jpeg?auto=compress&w=70&h=70" alt="Camisa Formal">
+                        <div class="product-info">
+                            <strong>Camisa Formal</strong>
+                            <span>$399 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Camisa Formal', 399)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&w=70&h=70" alt="Playera Casual">
+                        <div class="product-info">
+                            <strong>Playera Casual</strong>
+                            <span>$199 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Playera Casual', 199)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/532220/pexels-photo-532220.jpeg?auto=compress&w=70&h=70" alt="Pantalón de Mezclilla">
+                        <div class="product-info">
+                            <strong>Pantalón de Mezclilla</strong>
+                            <span>$499 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Pantalón de Mezclilla', 499)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&w=70&h=70" alt="Chamarra Deportiva">
+                        <div class="product-info">
+                            <strong>Chamarra Deportiva</strong>
+                            <span>$699 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Chamarra Deportiva', 699)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/936075/pexels-photo-936075.jpeg?auto=compress&w=70&h=70" alt="Short Deportivo">
+                        <div class="product-info">
+                            <strong>Short Deportivo</strong>
+                            <span>$249 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Short Deportivo', 249)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1707828/pexels-photo-1707828.jpeg?auto=compress&w=70&h=70" alt="Saco Elegante">
+                        <div class="product-info">
+                            <strong>Saco Elegante</strong>
+                            <span>$899 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Saco Elegante', 899)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1707828/pexels-photo-1707828.jpeg?auto=compress&w=70&h=70" alt="Suéter de Punto">
+                        <div class="product-info">
+                            <strong>Suéter de Punto</strong>
+                            <span>$349 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Suéter de Punto', 349)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&w=70&h=70" alt="Chaleco Casual">
+                        <div class="product-info">
+                            <strong>Chaleco Casual</strong>
+                            <span>$299 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Chaleco Casual', 299)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/532220/pexels-photo-532220.jpeg?auto=compress&w=70&h=70" alt="Pantalón de Vestir">
+                        <div class="product-info">
+                            <strong>Pantalón de Vestir</strong>
+                            <span>$599 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Pantalón de Vestir', 599)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&w=70&h=70" alt="Sudadera Urbana">
+                        <div class="product-info">
+                            <strong>Sudadera Urbana</strong>
+                            <span>$399 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Sudadera Urbana', 399)">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Ropa de Mujer -->
+            <div class="category">
+                <h3>Ropa de Mujer</h3>
+                <div class="products">
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1138903/pexels-photo-1138903.jpeg?auto=compress&w=70&h=70" alt="Blusa Elegante">
+                        <div class="product-info">
+                            <strong>Blusa Elegante</strong>
+                            <span>$299 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Blusa Elegante', 299)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&w=70&h=70" alt="Vestido Floral">
+                        <div class="product-info">
+                            <strong>Vestido Floral</strong>
+                            <span>$499 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Vestido Floral', 499)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&w=70&h=70" alt="Falda Plisada">
+                        <div class="product-info">
+                            <strong>Falda Plisada</strong>
+                            <span>$349 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Falda Plisada', 349)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1138903/pexels-photo-1138903.jpeg?auto=compress&w=70&h=70" alt="Pantalón Palazzo">
+                        <div class="product-info">
+                            <strong>Pantalón Palazzo</strong>
+                            <span>$399 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Pantalón Palazzo', 399)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&w=70&h=70" alt="Chamarra de Mezclilla">
+                        <div class="product-info">
+                            <strong>Chamarra de Mezclilla</strong>
+                            <span>$599 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Chamarra de Mezclilla', 599)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1138903/pexels-photo-1138903.jpeg?auto=compress&w=70&h=70" alt="Suéter Largo">
+                        <div class="product-info">
+                            <strong>Suéter Largo</strong>
+                            <span>$349 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Suéter Largo', 349)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&w=70&h=70" alt="Leggings Deportivos">
+                        <div class="product-info">
+                            <strong>Leggings Deportivos</strong>
+                            <span>$249 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Leggings Deportivos', 249)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1138903/pexels-photo-1138903.jpeg?auto=compress&w=70&h=70" alt="Blazer Rosa">
+                        <div class="product-info">
+                            <strong>Blazer Rosa</strong>
+                            <span>$699 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Blazer Rosa', 699)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&w=70&h=70" alt="Top Deportivo">
+                        <div class="product-info">
+                            <strong>Top Deportivo</strong>
+                            <span>$199 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Top Deportivo', 199)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1138903/pexels-photo-1138903.jpeg?auto=compress&w=70&h=70" alt="Sudadera Casual">
+                        <div class="product-info">
+                            <strong>Sudadera Casual</strong>
+                            <span>$399 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Sudadera Casual', 399)">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Accesorios -->
+            <div class="category">
+                <h3>Accesorios</h3>
+                <div class="products">
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Reloj de Pulsera">
+                        <div class="product-info">
+                            <strong>Reloj de Pulsera</strong>
+                            <span>$599 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Reloj de Pulsera', 599)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Gorra Casual">
+                        <div class="product-info">
+                            <strong>Gorra Casual</strong>
+                            <span>$149 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Gorra Casual', 149)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Bolso de Mano">
+                        <div class="product-info">
+                            <strong>Bolso de Mano</strong>
+                            <span>$399 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Bolso de Mano', 399)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Lentes de Sol">
+                        <div class="product-info">
+                            <strong>Lentes de Sol</strong>
+                            <span>$299 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Lentes de Sol', 299)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Cinturón de Piel">
+                        <div class="product-info">
+                            <strong>Cinturón de Piel</strong>
+                            <span>$249 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Cinturón de Piel', 249)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Bufanda de Lana">
+                        <div class="product-info">
+                            <strong>Bufanda de Lana</strong>
+                            <span>$199 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Bufanda de Lana', 199)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Pulsera de Acero">
+                        <div class="product-info">
+                            <strong>Pulsera de Acero</strong>
+                            <span>$179 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Pulsera de Acero', 179)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Collar de Moda">
+                        <div class="product-info">
+                            <strong>Collar de Moda</strong>
+                            <span>$229 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Collar de Moda', 229)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Mochila Casual">
+                        <div class="product-info">
+                            <strong>Mochila Casual</strong>
+                            <span>$499 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Mochila Casual', 499)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=70&h=70" alt="Aretes Elegantes">
+                        <div class="product-info">
+                            <strong>Aretes Elegantes</strong>
+                            <span>$159 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Aretes Elegantes', 159)">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Ropa Infantil -->
+            <div class="category">
+                <h3>Ropa Infantil</h3>
+                <div class="products">
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1648376/pexels-photo-1648376.jpeg?auto=compress&w=70&h=70" alt="Playera Infantil">
+                        <div class="product-info">
+                            <strong>Playera Infantil</strong>
+                            <span>$129 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Playera Infantil', 129)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&w=70&h=70" alt="Pantalón Niño">
+                        <div class="product-info">
+                            <strong>Pantalón Niño</strong>
+                            <span>$199 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Pantalón Niño', 199)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/3661355/pexels-photo-3661355.jpeg?auto=compress&w=70&h=70" alt="Vestido Niña">
+                        <div class="product-info">
+                            <strong>Vestido Niña</strong>
+                            <span>$249 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Vestido Niña', 249)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/3661355/pexels-photo-3661355.jpeg?auto=compress&w=70&h=70" alt="Sudadera Infantil">
+                        <div class="product-info">
+                            <strong>Sudadera Infantil</strong>
+                            <span>$199 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Sudadera Infantil', 199)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&w=70&h=70" alt="Short Niño">
+                        <div class="product-info">
+                            <strong>Short Niño</strong>
+                            <span>$99 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Short Niño', 99)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/3661355/pexels-photo-3661355.jpeg?auto=compress&w=70&h=70" alt="Falda Niña">
+                        <div class="product-info">
+                            <strong>Falda Niña</strong>
+                            <span>$149 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Falda Niña', 149)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&w=70&h=70" alt="Chamarra Niño">
+                        <div class="product-info">
+                            <strong>Chamarra Niño</strong>
+                            <span>$299 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Chamarra Niño', 299)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/3661355/pexels-photo-3661355.jpeg?auto=compress&w=70&h=70" alt="Conjunto Deportivo">
+                        <div class="product-info">
+                            <strong>Conjunto Deportivo</strong>
+                            <span>$349 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Conjunto Deportivo', 349)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&w=70&h=70" alt="Pijama Infantil">
+                        <div class="product-info">
+                            <strong>Pijama Infantil</strong>
+                            <span>$179 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Pijama Infantil', 179)">Agregar al carrito</button>
+                    </div>
+                    <div class="product">
+                        <img src="https://images.pexels.com/photos/3661355/pexels-photo-3661355.jpeg?auto=compress&w=70&h=70" alt="Calcetas Divertidas">
+                        <div class="product-info">
+                            <strong>Calcetas Divertidas</strong>
+                            <span>$59 MXN</span>
+                        </div>
+                        <button onclick="addToCart('Calcetas Divertidas', 59)">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cart-section" id="cart-section">
+            <div class="cart">
+                <h2>Carrito de compras</h2>
+                <ul class="cart-list" id="cart-list"></ul>
+                <strong>Total: $<span id="cart-total">0</span> MXN</strong><br>
+                <button class="checkout-btn" onclick="checkout()">Finalizar compra</button>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Ticket -->
+    <div class="modal" id="ticket-modal">
+        <div class="modal-content">
+            <h3>¡Gracias por tu compra!</h3>
+            <ul class="ticket-list" id="ticket-list"></ul>
+            <strong>Total: $<span id="ticket-total"></span> MXN</strong><br>
+            <button class="close-modal" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+    <script>
+        // Banner dinámico mejorado
+        const ofertas = [
+            "¡20% de descuento en ropa de hombre!",
+            "¡Hasta 30% en ropa infantil esta semana!",
+            "¡Accesorios con envío gratis!",
+            "¡Ropa de mujer: 2x1 en productos seleccionados!",
+            "¡Ofertas de temporada solo en Suburbia!"
+        ];
+        const iconos = [
+            "🎉", "🛍️", "🔥", "✨", "👗", "👕", "🧢"
+        ];
+        let bannerIndex = 0;
+        function updateBanner() {
+            document.getElementById('banner-text').textContent = ofertas[bannerIndex];
+            document.querySelector('.banner-icon').textContent = iconos[bannerIndex % iconos.length];
+            bannerIndex = (bannerIndex + 1) % ofertas.length;
+        }
+        updateBanner();
+        setInterval(updateBanner, 4000);
+
+        // Carrito
+        let cart = [];
+        function addToCart(name, price) {
+            const index = cart.findIndex(item => item.name === name && item.price === price);
+            if (index !== -1) {
+                cart[index].quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            updateCart();
+        }
+        function updateCart() {
+            const cartList = document.getElementById('cart-list');
+            cartList.innerHTML = '';
+            let total = 0;
+            let count = 0;
+            cart.forEach((item, idx) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="cart-product-name">${item.name} - $${item.price} MXN</span>
+                    <input type="number" min="1" value="${item.quantity}" onchange="changeQuantity(${idx}, this.value)">
+                    <button class="remove-btn" onclick="removeFromCart(${idx})">Eliminar</button>
+                    <span style="margin-left:10px;font-weight:bold;color:#e6007e;">$${item.price * item.quantity} MXN</span>
+                `;
+                cartList.appendChild(li);
+                total += item.price * item.quantity;
+                count += item.quantity;
+            });
+            document.getElementById('cart-total').textContent = total;
+            document.getElementById('cart-float-count').textContent = count;
+        }
+        function changeQuantity(idx, value) {
+            let qty = parseInt(value);
+            if (isNaN(qty) || qty < 1) qty = 1;
+            cart[idx].quantity = qty;
+            updateCart();
+        }
+        function removeFromCart(idx) {
+            cart.splice(idx, 1);
+            updateCart();
+        }
+        function checkout() {
+            if (cart.length === 0) {
+                alert('El carrito está vacío.');
+                return;
+            }
+            // Mostrar ticket
+            const ticketList = document.getElementById('ticket-list');
+            ticketList.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} x${item.quantity} - $${item.price * item.quantity} MXN`;
+                ticketList.appendChild(li);
+                total += item.price * item.quantity;
+            });
+            document.getElementById('ticket-total').textContent = total;
+            document.getElementById('ticket-modal').style.display = 'flex';
+            cart = [];
+            updateCart();
+        }
+        function closeModal() {
+            document.getElementById('ticket-modal').style.display = 'none';
+        }
+        function goToCart() {
+            document.getElementById('cart-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        window.changeQuantity = changeQuantity;
+        window.removeFromCart = removeFromCart;
+        window.closeModal = closeModal;
+        window.goToCart = goToCart;
+        // Inicializar contador de carrito
+        updateCart();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
